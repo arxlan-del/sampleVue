@@ -12,42 +12,50 @@
         <div class="small-6 columns">
             <h1 class="text-center">SEN</h1>
             <div class="healthbar">
-                <div class="healthbar text-center" style="background-color: green; margin: 0; color: white;">
-
+                <div :style = " { width : player_heal + '%'}" class="healthbar text-center" style="background-color: green; margin: 0; color: white;">
+                    {{ player_heal }}%
                 </div>
             </div>
         </div>
         <div class="small-6 columns">
             <h1 class="text-center">CANAVAR</h1>
             <div class="healthbar">
-                <div class="healthbar text-center" style="background-color: green; margin: 0; color: white;">
+                <div :style = " { width : monster_heal + '%'}" class="healthbar text-center" style="background-color: green; margin: 0; color: white;">
+                    {{ monster_heal }}%
 
                 </div>
             </div>
         </div>
     </section>
-    <section class="row controls">
+    <section class="row controls" v-if = "!gameStarted">
         <div class="small-12 columns">
-            <button id="start-game">YENİ OYUN</button>
+            <button id="start-game" @click ="startGame()">YENİ OYUN</button>
         </div>
     </section>
-    <section class="row controls">
+    <section class="row controls" v-if = "gameStarted" >
         <div class="small-12 columns">
-            <button id="attack">SALDIRI</button>
-            <button id="special-attack">ÖZEL SALDIRI</button>
-            <button id="heal">İLK YARDIM</button>
-            <button id="give-up">PES ET!</button>
+            <button id="attack" @click = "moveAttack()">SALDIRI</button>
+            <button id="special-attack" @click = "moveSpecialAttack()">ÖZEL SALDIRI</button>
+            <button id="heal" @click = "healUp()">İLK YARDIM</button>
+            <button id="give-up" @click = "giveUp()">PES ET!</button>
         </div>
     </section>
-    <section class="row log">
+
+    <section class="row log" v-if = "logs.length > 0">
         <div class="small-12 columns">
             <ul>
-                <li>
-
+                <li 
+                    :class = "{'player-turn' : log.turn == 'P', 'monster-turn': log.turn == 'M'  }"
+                    v-for = "log in logs">
+                        {{ log.text }}   
                 </li>
             </ul>
         </div>
     </section>
 </div>
+
+
+<script src="app.js"></script>
+
 </body>
 </html>
