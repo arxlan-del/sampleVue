@@ -4,45 +4,57 @@ new Vue({
         gameStarted : false,
         monster_heal: 100,
         player_heal: 100,
-        logs : []
+        logs : [],
+        attackMultiple : 10,
+        specialAttackMultiple : 20,
+        healUpMultiple : 20,
+        monsterAttackMultiple: 15,
+        log_texts : {
+            attack: "Player Attack : ",
+            specialAttack : "Player Special Attack : ",
+            healUp : "Player Heal Up",
+            giveUp : "Player Give Up!!!",
+            monsterAttack:  "Monster Attack : "
+
+        }
     },
     methods: {
         startGame(){
             this.gameStarted = true;    
         },
         moveAttack(){
-            var point = Math.ceil( Math.random() * 10)
+            var point = Math.ceil( Math.random() * this.attackMultiple)
             this.monster_heal -= point
             this.moveMonsterAttack()
-            this.logPushUp({ turn: "P", text : "Player Attack ("+  point + ") "   })
+            this.logPushUp({ turn: "P", text : this.log_texts.attack +  point   })
             
         },
         moveSpecialAttack(){
-            var point = Math.ceil( Math.random() * 20)
+            var point = Math.ceil( Math.random() * this.specialAttackMultiple)
             this.monster_heal -= point
             this.moveMonsterAttack()
-            this.logPushUp({ turn: "P", text : "Player Special Attack ("+  point + ")"   })
+            this.logPushUp({ turn: "P", text : this.log_texts.specialAttack +  point  })
 
             
         },
         healUp(){
-            var point = Math.ceil( Math.random() * 20)
+            var point = Math.ceil( Math.random() * this.healUpMultiple)
             this.player_heal += point
             this.moveMonsterAttack()
-            this.logPushUp({ turn: "P", text : "Player Heal Up ("+  point + ")"   })
+            this.logPushUp({ turn: "P", text : this.log_texts.healUp + point    })
 
            
         },
         giveUp(){
             this.player_heal = 0
-            this.logPushUp({ turn: "P", text : "Player Give Up!!!"   })
+            this.logPushUp({ turn: "P", text :  this.log_texts.giveUp })
 
            
         },
         moveMonsterAttack(){
-            var point = Math.ceil( Math.random() * 15)
+            var point = Math.ceil( Math.random() * this.monsterAttackMultiple)
             this.player_heal -= point
-            this.logPushUp({ turn: "M", text : "Monster Attack ("+  point + ")"   })
+            this.logPushUp({ turn: "M", text : this.log_texts.monsterAttack  + point  })
 
        
         },
@@ -62,8 +74,6 @@ new Vue({
                     this.logs = []
                 }
             }
-           
-
             else if(value >= 100){
                 this.player_heal = 100  
             }
@@ -75,10 +85,22 @@ new Vue({
                     this.player_heal = 100    
                     this.monster_heal = 100   
                     this.logs = []
- 
                 }
             }
            
+        }
+    },
+
+    computed: {
+        player_progress : function(){
+            return {
+                width : this.player_heal + '%'
+            }
+        },
+        monster_progress : function(){
+            return {
+                width : this.monster_heal + '%'
+            }
         }
     }
 
